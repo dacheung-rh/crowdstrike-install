@@ -1,7 +1,0 @@
----
-patch_path: 'C:\patch'
-patch_file: 'SQLServer2019-KB5030333-x64.exe'
-patch_build_version: '15.0.4335.1'
-## https://learn.microsoft.com/en-us/troubleshoot/sql/releases/sqlserver-2019/build-versions
-## SQL Server build version >> 15.0.4335.1
-update_file_url: https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5030333-x64.exe

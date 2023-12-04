@@ -1,0 +1,8 @@
+---
+- name: CrowdStrike Falcon | Uninstalling Falcon Sensor (Linux)
+  ansible.builtin.package:
+    name: falcon-sensor
+    state: absent
+    purge: "{{ True if (ansible_facts['pkg_mgr'] == 'apt') else omit }}"
+  when:
+    - ansible_facts['system'] == "Linux"

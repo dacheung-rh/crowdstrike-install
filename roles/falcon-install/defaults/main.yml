@@ -1,0 +1,83 @@
+# If the installation method is 'file', provide the absolute path to the installer file.
+#
+falcon_localfile_path:
+
+# If the installation method is 'file', specify whether to remove the local file after installation.
+# By default, this is disabled in the event the falcon_localfile_path is set to a shared file
+# system location.
+#
+falcon_localfile_cleanup: no
+
+# Specify whether or not to verify the Falcon sensor Linux based packages.
+# By default, this is enabled - which will handle the installation and importing
+# of the CrowdStrike Falcon sensor GPG Key.
+#
+falcon_gpg_key_check: yes
+
+
+# The Falcon sensor version to install. This allows you to pin a specific sensor
+# version.
+#
+# NOTE: This variable will be overriden by falcon_sensor_update_policy_name.
+#
+falcon_sensor_version: ""
+
+# The Falcon sensor version to install by N-X. By default, this is the latest sensor version.
+# Setting the value to 1 would install the sensor at N-1.
+# The value must be an integer between 0 and 5 inclusive.
+#
+# NOTE: This variable will be overriden by falcon_sensor_update_policy_name or falcon_sensor_version.
+#
+falcon_sensor_version_decrement: 0
+
+# The name of the Falcon Sensor Update Policy to use in order to specify the Falcon sensor
+# version to install. This is optional, however, if specified, please note that this will
+# override the falcon_sensor_version_decrement and falcon_sensor_version variables.
+#
+# Note: To use the default Falcon Sensor update policy:
+#   falcon_sensor_update_policy_name: "platform_default"
+#
+falcon_sensor_update_policy_name: ""
+
+# Where should the sensor file be copied to on Linux and MacOS systems?
+# By default, this will be the temp OS filesystem
+#
+falcon_install_tmp_dir: "/tmp"
+
+# Number of times to retry sensor install on windows
+#
+falcon_windows_install_retries: 10
+
+# Number of seconds to wait to retry sensor install
+# on windows in the event of a failure
+#
+falcon_windows_install_delay: 120
+
+# Where should the sensor file be downloaded to on Windows systems?
+# By default, this will be the temp OS filesystem
+#
+# For Windows, this can be "%SYSTEMROOT%\\Temp"
+#
+falcon_windows_tmp_dir: "%SYSTEMROOT%\\Temp"
+
+# Additional install arguments beyond the default required
+#
+# Note: /quiet /install CID={{ falcon_cid }} are already added so do not
+#       re-add them here.
+#
+falcon_windows_install_args: "/norestart"
+
+# Additional arugments to uninstall the sensor.
+# You can add your maintenance token here by adding MAINTENANCE_TOKEN=<token>
+#
+falcon_windows_uninstall_args: "/norestart"
+
+# Ansible become method for Windows systems.
+# The default is runas
+#
+falcon_windows_become_method: runas
+
+# Ansible become user for Windows systems.
+# The default is SYSTEM
+#
+falcon_windows_become_user: SYSTEM

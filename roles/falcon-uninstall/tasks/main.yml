@@ -1,0 +1,30 @@
+---
+# tasks file for falcon_uninstall
+- name: Uninstall pretasks
+  ansible.builtin.include_tasks: preuninstall.yml
+
+# - name: API block
+#   when:
+#     - falcon_client_id and falcon_client_secret
+#     - falcon_sensor_installed
+#   block:
+#     - ansible.builtin.include_role:
+#         name: falcon_install
+#         tasks_from: auth
+
+- name: Linux Block
+  when:
+    - ansible_facts['os_family'] != "Windows"
+  become: true
+  become_user: root
+  block:
+    - ansible.builtin.include_tasks: uninstall.yml
+
+- name: Windows Block
+  when:
+    - ansible_facts['os_family'] == "Windows"
+  become: true
+  become_method: "{{ falcon_windows_become_method }}"
+  become_user: "{{ falcon_windows_become_user }}"
+  block:
+    - ansible.builtin.include_tasks: win_uninstall.yml

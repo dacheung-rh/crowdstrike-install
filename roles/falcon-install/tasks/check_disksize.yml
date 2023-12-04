@@ -2,11 +2,10 @@
 - name: Get windows disk facts
   community.windows.win_disk_facts:
 
-- name: Check storage size 5GB or above available space
+- name: Check storage size 1GB or above available space
   fail:
     msg: "There were not enough avaible space on Windows server"
   vars:
-    # Get first system disk (TODO change to second)
     disk: '{{ ansible_facts.disks|selectattr("system_disk")|first }}'
     disksize_gib: '{{ (disk.size/1024|pow(3))|round|int }}'
-  when: '{{ disksize_gib }} < 50'
+  when: '{{ disksize_gib }} < 1'

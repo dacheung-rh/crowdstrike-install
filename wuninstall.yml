@@ -1,0 +1,3 @@
+- hosts: Windows
+  roles:
+    - falcon-uninstall

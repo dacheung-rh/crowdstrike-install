@@ -1,4 +1,0 @@
-- hosts: Windows
-  gather_facts: false
-  roles:
-    - mssql-patch

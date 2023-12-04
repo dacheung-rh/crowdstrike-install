@@ -1,0 +1,4 @@
+- hosts: Windows
+  gather_facts: true
+  roles:
+    - falcon-install
