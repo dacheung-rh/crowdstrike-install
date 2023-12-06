@@ -36,7 +36,7 @@
   ansible.posix.mount:
     src: "{{ smb_sourcepath }}"
     path: "{{ smb_targetpath }}"
-    opts: "rw,vers=3,file_mode=0600,dir_mode=0700,credentials=/etc/smbcredentials/{{ smb_username }}.cred"
+    opts: "serverino,nosharesock,actimeo=30,file_mode=0600,dir_mode=0700,credentials=/etc/smbcredentials/{{ smb_username }}.cred"
     fstype: cifs
     state: ephemeral
   become: true
