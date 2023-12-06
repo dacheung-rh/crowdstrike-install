@@ -1,0 +1,17 @@
+- hosts: localhost
+  tasks:
+  # - name: Mount ephemeral SMB volume
+  #   ansible.posix.mount:
+  #     src: //testaabc.file.core.windows.net/agents
+  #     path: /mnt/smb_share
+  #     opts: "rw,vers=3,file_mode=0600,dir_mode=0700,dom={{ ad_domain }},username={{ ad_username }},password={{ ad_password }}"
+  #     fstype: cifs
+  #     state: ephemeral
+
+  - name: Download the file
+    azure_rm_storageblob:
+      resource_group: openenv-wh5jx
+      storage_account_name: testaabc
+      container: agents
+      blob: ES_consumption.PNG
+      dest: ~/tmp/ES_consumption.PNG
