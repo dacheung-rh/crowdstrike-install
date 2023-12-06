@@ -8,6 +8,7 @@
       path: /mnt/smb_share
       state: directory
       mode: '0755'
+    become: true
 
   - name: Mount ephemeral SMB volume
     ansible.posix.mount:
@@ -16,4 +17,5 @@
       opts: "rw,vers=3,file_mode=0600,dir_mode=0700,username={{ username }},password={{ password }}"
       fstype: cifs
       state: ephemeral
+    become: true
 
