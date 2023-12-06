@@ -1,17 +1,19 @@
 - hosts: localhost
+  vars:
+  - username: 'testaabc'
+  - password: 'xgWHf1BM5v+Kbj88pg7pR/bfoTBHjmIgUOsU4NiD8HE0dfL8RTdjxToe1XxaK9r7BNAb5z+EWwzP+AStCRMUUg=='
   tasks:
-  # - name: Mount ephemeral SMB volume
-  #   ansible.posix.mount:
-  #     src: //testaabc.file.core.windows.net/agents
-  #     path: /mnt/smb_share
-  #     opts: "rw,vers=3,file_mode=0600,dir_mode=0700,dom={{ ad_domain }},username={{ ad_username }},password={{ ad_password }}"
-  #     fstype: cifs
-  #     state: ephemeral
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: /mnt/smb_share
+      state: directory
+      mode: '0755'
 
-  - name: Download the file
-    azure_rm_storageblob:
-      resource_group: openenv-wh5jx
-      storage_account_name: testaabc
-      container: agents
-      blob: ES_consumption.PNG
-      dest: ~/tmp/ES_consumption.PNG
+  - name: Mount ephemeral SMB volume
+    ansible.posix.mount:
+      src: //testaabc.file.core.windows.net/agents
+      path: /mnt/smb_share
+      opts: "rw,vers=3,file_mode=0600,dir_mode=0700,username={{ username }},password={{ password }}"
+      fstype: cifs
+      state: ephemeral
+
