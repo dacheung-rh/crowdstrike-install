@@ -10,6 +10,12 @@
       mode: '0755'
     become: true
 
+  - name: Install cifs-utils
+    ansible.builtin.yum:
+      name: cifs-utils
+      state: latest
+    become: true
+
   - name: Mount ephemeral SMB volume
     ansible.posix.mount:
       src: //testaabc.file.core.windows.net/agents
