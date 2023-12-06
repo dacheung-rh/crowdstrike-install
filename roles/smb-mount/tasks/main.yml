@@ -11,6 +11,8 @@
     path: "{{ smb_targetpath }}"
     state: directory
     mode: '0755'
+    owner: awx
+    group: awx
   become: true
   delegate_to: localhost
 
