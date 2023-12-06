@@ -23,7 +23,7 @@
   delegate_to: localhost
 
 - name: Create credential username
-  ansible.builtin.shell: bash -c 'echo "username={{ smb_username }} >> /etc/smbcredentials/{{ smb_username }}.cred'
+  ansible.builtin.shell: bash -c 'echo "username={{ smb_username }}" >> /etc/smbcredentials/{{ smb_username }}.cred'
   become: true
   delegate_to: localhost
 
