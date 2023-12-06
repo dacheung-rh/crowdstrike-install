@@ -40,6 +40,14 @@
   delegate_to: localhost
   ignore_errors: true
 
+- name: check if 20.47.17.105:455 is accessible
+  wait_for:
+    host: 20.47.17.105
+    port: 445
+    state: started
+    delay: 0
+    timeout: 1
+
 - name: Mount ephemeral SMB volume
   ansible.posix.mount:
     src: "{{ smb_sourcepath }}"
