@@ -1,4 +1,4 @@
-- hosts: RHEL
+- hosts: localhost
   vars:
   - username: 'testaabc'
   - password: 'xgWHf1BM5v+Kbj88pg7pR/bfoTBHjmIgUOsU4NiD8HE0dfL8RTdjxToe1XxaK9r7BNAb5z+EWwzP+AStCRMUUg=='
@@ -10,11 +10,11 @@
       mode: '0755'
     become: true
 
-  # - name: Install cifs-utils
-  #   ansible.builtin.dnf:
-  #     name: cifs-utils
-  #     state: present
-  #   become: true
+  - name: Install cifs-utils
+    ansible.builtin.dnf:
+      name: cifs-utils
+      state: present
+    become: true
 
   - ansible.builtin.shell: nc -zvw3 20.47.17.105 445
 
