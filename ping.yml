@@ -1,0 +1,8 @@
+---
+- hosts: RHEL
+  gather_facts: false
+  tasks:
+  - ansible.builtin.ping:
+
+  - ansible.builtin.shell: whoami
+
