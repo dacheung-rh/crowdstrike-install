@@ -1,29 +1,6 @@
 - hosts: localhost
-  vars:
-  - username: 'testaabc'
-  - password: 'xgWHf1BM5v+Kbj88pg7pR/bfoTBHjmIgUOsU4NiD8HE0dfL8RTdjxToe1XxaK9r7BNAb5z+EWwzP+AStCRMUUg=='
+  roles:
+    - smb-mount
+  
   tasks:
-  - name: Create a directory if it does not exist
-    ansible.builtin.file:
-      path: /mnt/smb_share
-      state: directory
-      mode: '0755'
-    become: true
-
-  - name: Install cifs-utils
-    ansible.builtin.dnf:
-      name: cifs-utils
-      state: present
-    become: true
-
-  - ansible.builtin.shell: nc -zvw3 20.47.17.105 445
-
-  - name: Mount ephemeral SMB volume
-    ansible.posix.mount:
-      src: //testaabc.file.core.windows.net/agents
-      path: /mnt/smb_share
-      opts: "rw,vers=3,file_mode=0600,dir_mode=0700,username={{ username }},password={{ password }}"
-      fstype: cifs
-      state: ephemeral
-    become: true
-
+  - ansible.builtin.shell: "ls {{ smb_targetpath }}"

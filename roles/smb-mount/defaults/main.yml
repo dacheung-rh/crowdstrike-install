@@ -1,0 +1,8 @@
+smb_sourcepath: '//testaabc.file.core.windows.net/agents'
+
+smb_username:
+
+smb_password:
+
+smb_targetpath: '/mnt/smb_share'
+

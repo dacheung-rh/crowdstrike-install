@@ -1,0 +1,43 @@
+---
+- name: Install cifs-utils
+  ansible.builtin.dnf:
+    name: cifs-utils
+    state: present
+  become: true
+  delegate_to: localhost
+
+- name: Create mount point directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ smb_targetpath }}"
+    state: directory
+    mode: '0755'
+  become: true
+  delegate_to: localhost
+
+- name: Create credential directory if it does not exist
+  ansible.builtin.file:
+    path: /etc/smbcredentials
+    state: directory
+    mode: '0755'
+  become: true
+  delegate_to: localhost
+
+- name: Create credential username
+  ansible.builtin.shell: bash -c 'echo "username={{ smb_username }} >> /etc/smbcredentials/{{ smb_username }}.cred'
+  become: true
+  delegate_to: localhost
+
+- name: Create credential password
+  ansible.builtin.shell: bash -c 'echo "password={{ smb_password }}" >> /etc/smbcredentials/{{ smb_username }}.cred'
+  become: true
+  delegate_to: localhost
+
+- name: Mount ephemeral SMB volume
+  ansible.posix.mount:
+    src: "{{ smb_sourcepath }}"
+    path: "{{ smb_targetpath }}"
+    opts: "rw,vers=3,file_mode=0600,dir_mode=0700,credentials=/etc/smbcredentials/{{ smb_username }}.cred"
+    fstype: cifs
+    state: ephemeral
+  become: true
+  delegate_to: localhost
