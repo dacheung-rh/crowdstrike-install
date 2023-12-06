@@ -36,6 +36,9 @@
   ansible.posix.mount:
     path: "{{ smb_targetpath }}"
     state: unmounted
+  become: true
+  delegate_to: localhost
+  ignore_errors: true
 
 - name: Mount ephemeral SMB volume
   ansible.posix.mount:
