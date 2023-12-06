@@ -11,8 +11,6 @@
     path: "{{ smb_targetpath }}"
     state: directory
     mode: '0755'
-    owner: awx
-    group: awx
   become: true
   delegate_to: localhost
 
@@ -62,6 +60,6 @@
 
 
 - name: Mount ephemeral SMB volume
-  ansible.builtin.shell: mount -t cifs //testaabc.file.core.windows.net/agents "{{ smb_targetpath }}" -o credentials=/etc/smbcredentials/testaabc.cred,dir_mode=0777,file_mode=0777,serverino,nosharesock,actimeo=30,context=system_u:object_r:container_file_t:s0
+  ansible.builtin.shell: sudo mount -t cifs //testaabc.file.core.windows.net/agents "{{ smb_targetpath }}" -o credentials=/etc/smbcredentials/testaabc.cred,dir_mode=0777,file_mode=0777,serverino,nosharesock,actimeo=30,context=system_u:object_r:container_file_t:s0
   become: true
   delegate_to: localhost
