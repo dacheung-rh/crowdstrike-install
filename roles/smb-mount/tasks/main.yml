@@ -48,12 +48,18 @@
     delay: 0
     timeout: 1
 
+# - name: Mount ephemeral SMB volume
+#   ansible.posix.mount:
+#     src: "{{ smb_sourcepath }}"
+#     path: "{{ smb_targetpath }}"
+#     opts: "rw,serverino,nosharesock,actimeo=30,file_mode=0777,dir_mode=0777,credentials=/etc/smbcredentials/{{ smb_username }}.cred,context=system_u:object_r:container_file_t:s0"
+#     fstype: cifs
+#     state: ephemeral
+#   become: true
+#   delegate_to: localhost
+
+
 - name: Mount ephemeral SMB volume
-  ansible.posix.mount:
-    src: "{{ smb_sourcepath }}"
-    path: "{{ smb_targetpath }}"
-    opts: "rw,serverino,nosharesock,actimeo=30,file_mode=0777,dir_mode=0777,credentials=/etc/smbcredentials/{{ smb_username }}.cred,context=system_u:object_r:container_file_t:s0"
-    fstype: cifs
-    state: ephemeral
+  ansible.builtin.shell: mount -t cifs //testaabc.file.core.windows.net/agents /mnt/agents -o credentials=/etc/smbcredentials/testaabc.cred,dir_mode=0777,file_mode=0777,serverino,nosharesock,actimeo=30,context=system_u:object_r:container_file_t:s0
   become: true
   delegate_to: localhost
