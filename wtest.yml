@@ -11,11 +11,12 @@
     become: true
 
   # - name: Install cifs-utils
-  #   ansible.builtin.yum:
+  #   ansible.builtin.dnf:
   #     name: cifs-utils
-  #     state: latest
+  #     state: present
   #   become: true
-  - ansible.builtin.shell: curl -v telnet://testaabc.file.core.windows.net:445
+
+  - ansible.builtin.shell: nc -zvw3 20.47.17.105 445
 
   - name: Mount ephemeral SMB volume
     ansible.posix.mount:
