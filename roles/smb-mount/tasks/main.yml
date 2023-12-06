@@ -1,10 +1,10 @@
 ---
-- name: Install cifs-utils
-  ansible.builtin.dnf:
-    name: cifs-utils
-    state: present
-  become: true
-  delegate_to: localhost
+# - name: Install cifs-utils
+#   ansible.builtin.dnf:
+#     name: cifs-utils
+#     state: present
+#   become: true
+#   delegate_to: localhost
 
 - name: Create mount point directory if it does not exist
   ansible.builtin.file:
