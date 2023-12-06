@@ -1,4 +1,4 @@
-- hosts: localhost
+- hosts: RHEL
   vars:
   - username: 'testaabc'
   - password: 'xgWHf1BM5v+Kbj88pg7pR/bfoTBHjmIgUOsU4NiD8HE0dfL8RTdjxToe1XxaK9r7BNAb5z+EWwzP+AStCRMUUg=='
