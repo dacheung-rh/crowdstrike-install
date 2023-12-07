@@ -1,9 +1,9 @@
 ---
 - name: Utility present
-  ansible.builtin.dnf:
+  ansible.builtin.package:
     name: cifs-utils
     state: present
-  # become: true
+  become: true
   # delegate_to: localhost
 
 - name: Create mount point directory if it does not exist
