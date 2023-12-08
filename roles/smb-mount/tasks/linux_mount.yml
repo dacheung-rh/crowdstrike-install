@@ -21,13 +21,12 @@
   become: true
 
 - name: Create credential username
-  ansible.builtin.shell: bash -c 'echo "username={{ smb_username }}" >> /etc/smbcredentials/{{ smb_username }}.cred'
+  ansible.builtin.shell: bash -c 'echo "username={{ smb_username }}" > /etc/smbcredentials/{{ smb_username }}.cred'
   become: true
 
 - name: Create credential password
   ansible.builtin.shell: bash -c 'echo "password={{ smb_password }}" >> /etc/smbcredentials/{{ smb_username }}.cred'
   become: true
-  delegate_to: localhost
 
 - name: Unmount a mounted volume
   ansible.posix.mount:
