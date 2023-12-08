@@ -4,6 +4,7 @@
     name: cifs-utils
     state: present
   become: true
+  become_user: root
 
 - name: Create mount point directory if it does not exist
   ansible.builtin.file:

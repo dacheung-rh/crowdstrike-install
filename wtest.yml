@@ -1,4 +1,4 @@
-- hosts: localhost
+- hosts: RHEL
   roles:
     - smb-mount
   
