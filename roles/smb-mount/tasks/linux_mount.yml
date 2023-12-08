@@ -1,0 +1,59 @@
+---
+- name: Utility present
+  ansible.builtin.package:
+    name: cifs-utils
+    state: present
+  become: true
+
+- name: Create mount point directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ smb_targetpath }}"
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Create credential directory if it does not exist
+  ansible.builtin.file:
+    path: /etc/smbcredentials
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Create credential username
+  ansible.builtin.shell: bash -c 'echo "username={{ smb_username }}" >> /etc/smbcredentials/{{ smb_username }}.cred'
+  become: true
+
+- name: Create credential password
+  ansible.builtin.shell: bash -c 'echo "password={{ smb_password }}" >> /etc/smbcredentials/{{ smb_username }}.cred'
+  become: true
+  delegate_to: localhost
+
+- name: Unmount a mounted volume
+  ansible.posix.mount:
+    path: "{{ smb_targetpath }}"
+    state: unmounted
+  become: true
+  ignore_errors: true
+
+# - name: check if 20.47.17.105:455 is accessible
+#   wait_for:
+#     host: 20.47.17.105
+#     port: 445
+#     state: started
+#     delay: 0
+#     timeout: 1
+
+- name: Mount ephemeral SMB volume
+  ansible.posix.mount:
+    src: "{{ smb_sourcepath }}"
+    path: "{{ smb_targetpath }}"
+    opts: "rw,serverino,nosharesock,actimeo=30,file_mode=0777,dir_mode=0777,credentials=/etc/smbcredentials/{{ smb_username }}.cred,context=system_u:object_r:container_file_t:s0"
+    fstype: cifs
+    state: ephemeral
+  become: true
+
+
+# - name: Mount ephemeral SMB volume
+#   ansible.builtin.shell: "mount -t cifs //testaabc.file.core.windows.net/agents {{ smb_targetpath }} -o credentials=/etc/smbcredentials/testaabc.cred,rw,vers=3.0,dir_mode=0777,file_mode=0777,serverino,nosharesock,actimeo=30,uid=972,gid=971,context=system_u:object_r:container_file_t:s0"
+#   become: true
+#   delegate_to: localhost
