@@ -5,17 +5,12 @@
     state: present
 
 - name: Run a pwsh command
-  win_shell: "New-AzStorageContext -StorageAccountName {{ storageAccountName }} -StorageAccountKey {{ storageAccountKey }}"
-  # args:
-  #   executable: /usr/bin/pwsh
+  win_shell: |
+# $storageAccountName = "testaabc"
+# $storageAccountKey = "xgWHf1BM5v+Kbj88pg7pR/bfoTBHjmIgUOsU4NiD8HE0dfL8RTdjxToe1XxaK9r7BNAb5z+EWwzP+AStCRMUUg=="
+# $containerName = "testabc"
+# $blobName = "dd-qed-qede-qedf-qedi-qedr-8.33.0.20_dup7.6-1.el7_6.iso"
+# $destinationPath = "c:\temp"
+      "$context = New-AzStorageContext -StorageAccountName {{ storageAccountName }} -StorageAccountKey {{ storageAccountKey }}"
+      "get-AzStorageBlobContent -Container {{ containerName }} -Blob {{ blobName }} -Destination {{ destinationPath }} -Context $context -Force"
   register: result
-
-- name: context result
-  debug:
-    msg: "{{ result }}"
-
-- name: Run a pwsh command
-  win_shell: "get-AzStorageBlobContent -Container {{ containerName }} -Blob {{ blobName }} -Destination {{ destinationPath }} -Context {{ context }} -Force"
-  # args:
-  #   executable: /usr/bin/pwsh
-  register: result2
