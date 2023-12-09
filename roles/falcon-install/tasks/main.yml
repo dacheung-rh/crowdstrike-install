@@ -3,6 +3,7 @@
 - name: Preinstall block
   block:
     - ansible.builtin.include_tasks: preinstall.yml
+    - ansible.builtin.include_tasks: check_disksize.yml
 
 - name: CrowdStrike Falcon | Set full file path
   ansible.builtin.set_fact:

@@ -1,33 +1,26 @@
 ---
-- name: look for instance name
-  win_reg_stat:
-    path: HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server
-  register: sql_server_instance_names
+# Windows block
+- name: "Check available storage space (Windows)"
+  when:
+    - ansible_facts['os_family'] == "Windows"
+  block:
+    - name: Check sensor version
+      win_shell: "C:\Program Files\CrowdStrike\CSSensorSettings.exe" --version
+      register: cssensor_version
 
-- name: fail if no instance name found
-  fail:
-    msg: 'could not find MSSQL instance name'
-  when: sql_server_instance_names.properties.InstalledInstances.value is undefined or sql_server_instance_names.properties.InstalledInstances.value | length == 0
+    # - name: Check storage size 1GB or above available space
+    #   assert:
+    #     that: disk_available_gb|int  > 1
 
-- name: find instance properties
-  win_reg_stat:
-    path: HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL
-    name: "{{ item }}"
-  register: sql_server_instance_name_properties
-  loop: "{{ sql_server_instance_names.properties.InstalledInstances.value }}"
+# Linux Block
+# - name: "Check available storage space (RHEL)"
+#   when:
+#     - ansible_facts['os_family'] == "RedHat"
+#   block:
+#     - set_fact:
+#         mount: "{{ ansible_mounts | first }}"
+                                                        
 
-- name: find instance information
-  win_reg_stat:
-    path: HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\{{ item.value }}\Setup
-  register: sql_server_instance_information
-  loop: "{{ sql_server_instance_name_properties.results }}"
-
-- name: set version information
-  set_fact:
-    sql_server_edition: "{{ sql_server_instance_information.results[0].properties.Edition.value }}"
-    sql_server_version: "{{ sql_server_instance_information.results[0].properties.Version.value }}"
-    sql_server_patchlevel: "{{ sql_server_instance_information.results[0].properties.PatchLevel.value }}"
-
-- name: show sql server version
-  debug:
-    msg: "SQL server: {{ sql_server_edition }} - {{ sql_server_version }} - {{ sql_server_patchlevel }}"
+# - name: show sql server version
+#   debug:
+#     msg: "SQL server: {{ sql_server_edition }} - {{ sql_server_version }} - {{ sql_server_patchlevel }}"
