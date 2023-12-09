@@ -5,7 +5,7 @@
     state: present
 
 - name: Run a pwsh command
-  shell: "New-AzStorageContext -StorageAccountName {{ storageAccountName }} -StorageAccountKey {{ storageAccountKey }}"
+  win_shell: "New-AzStorageContext -StorageAccountName {{ storageAccountName }} -StorageAccountKey {{ storageAccountKey }}"
   # args:
   #   executable: /usr/bin/pwsh
   register: result
@@ -15,7 +15,7 @@
     msg: "{{ result }}"
 
 - name: Run a pwsh command
-  shell: "get-AzStorageBlobContent -Container {{ containerName }} -Blob {{ blobName }} -Destination {{ destinationPath }} -Context {{ context }} -Force"
+  win_shell: "get-AzStorageBlobContent -Container {{ containerName }} -Blob {{ blobName }} -Destination {{ destinationPath }} -Context {{ context }} -Force"
   # args:
   #   executable: /usr/bin/pwsh
   register: result2
