@@ -44,18 +44,6 @@
   when:
     - ansible_facts['pkg_mgr'] in linux_packagers
 
-- name: CrowdStrike Falcon | Install Falcon Sensor .pkg Package (macOS)
-  ansible.builtin.command: "/usr/sbin/installer -pkg {{ falcon_sensor_pkg }} -target /"
-  args:
-    creates: "/Applications/Falcon.app/Contents/Resources/falconctl"
-  when:
-    - ansible_facts['distribution'] == "MacOSX"
-
-- name: CrowdStrike Falcon | Verify Falcon Package Is Installed
-  ansible.builtin.package_facts:
-    manager: auto
-  when: ansible_facts['distribution'] != "MacOSX"
-
 - name: CrowdStrike Falcon | Gather tmp install directory objects
   ansible.builtin.find:
     paths: "{{ falcon_install_tmp_dir }}"

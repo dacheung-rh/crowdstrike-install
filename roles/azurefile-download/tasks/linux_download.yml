@@ -38,10 +38,6 @@
     state: ephemeral
   become: true
 
-# - name: Mount ephemeral SMB volume
-#   ansible.builtin.shell: "mount -t cifs {{ smb_sourcepath }} {{ smb_targetpath }} -o credentials=/etc/smbcredentials/{{ smb_username }}.cred,dir_mode=0777,file_mode=0777,serverino,nosharesock,actimeo=30"
-#   become: true
-
 - name: Copy falcon agent install file to target host
   ansible.builtin.copy:
     src: "{{ smb_targetpath }}/{{ smb_filename }}"

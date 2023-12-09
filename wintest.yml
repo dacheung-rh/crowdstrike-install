@@ -1,4 +1,21 @@
 - hosts: Windows
-  roles:
-    - azurefile-download
-  
+  # roles:
+  #   - azurefile-download
+
+  tasks:
+  - name: "Check available storage space (Windows)"
+    when:
+      - ansible_facts['os_family'] == "Windows"
+    block:
+      - name: Get windows disk facts
+        community.windows.win_disk_facts:
+
+      - set_fact:
+          disk: '{{ ansible_facts.disks|selectattr("system_disk")|first }}'
+                                                                                                                              
+      - set_fact: 
+          disk_available_gb: '{{ (disk.size/1024|pow(3))|round|int }}'
+
+      - name: Check if there is enough space
+        assert:
+          that: disk_available_gb|int  > 1

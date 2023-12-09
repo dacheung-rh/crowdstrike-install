@@ -1,4 +1,3 @@
 collections:
 - name: community.windows
-- name: azure.azcollection
 - name: ansible.posix

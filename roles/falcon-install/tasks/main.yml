@@ -4,29 +4,13 @@
   block:
     - ansible.builtin.include_tasks: preinstall.yml
 
-## TODO download file blob to windows and linux
-# - name: URL block
-#   when:
-#     - falcon_install_method == "url"
-#   block:
-#     - ansible.builtin.include_tasks: url.yml
-#       when: ansible_facts['os_family'] != "Windows"
-#     - ansible.builtin.include_tasks: win_url.yml
-#       when: ansible_facts['os_family'] == "Windows"
-
-# - name: File block
-#   when:
-#     - falcon_install_method == "file"
-#   block:
-#     - ansible.builtin.include_tasks: file.yml
-
 - name: CrowdStrike Falcon | Set full file path
   ansible.builtin.set_fact:
     falcon_sensor_pkg: "{{ falcon_localfile_path }}"
   when:
     - falcon_localfile_path | length > 0
 
-- name: Install block (linux/mac)
+- name: Install block (linux)
   when:
     - ansible_facts['os_family'] != "Windows"
   become: true
