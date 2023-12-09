@@ -1,4 +1,4 @@
-- hosts: Windows
+- hosts: RHEL
   roles:
     - smb-mount
   
