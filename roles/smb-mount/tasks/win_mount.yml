@@ -12,7 +12,7 @@
 
 - name: context result
   debug:
-  msg: result
+  msg: "{{ result }}"
 
 - name: Run a pwsh command
   shell: "get-AzStorageBlobContent -Container {{ containerName }} -Blob {{ blobName }} -Destination {{ destinationPath }} -Context {{ context }} -Force"
