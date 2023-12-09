@@ -1,4 +1,17 @@
 - hosts: Windows
   gather_facts: true
+
+  pre_tasks:
+    - debug:
+      msg: "download install file"
+    - import_role:
+      name: smb-mount
+    - debug:
+      msg: "download install file"
+
   roles:
-    - falcon-install
+    - { role: falcon-install }
+
+  post_tasks:
+    - debug:
+      msg: "download install file"

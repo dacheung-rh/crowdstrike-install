@@ -1,0 +1,6 @@
+- hosts: Windows
+  roles:
+    - smb-mount
+  
+  tasks:
+  - ansible.builtin.shell: "ls {{ smb_targetpath }}"
