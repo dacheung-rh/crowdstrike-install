@@ -5,7 +5,7 @@
   become: true
   become_user: root
   block:
-    - ansible.builtin.include_tasks: linux_mount.yml
+    - ansible.builtin.include_tasks: linux_download.yml
 
 - name: Windows Block
   when:
@@ -14,4 +14,4 @@
   become_method: "{{ falcon_windows_become_method }}"
   become_user: "{{ falcon_windows_become_user }}"
   block:
-    - ansible.builtin.include_tasks: win_mount.yml
+    - ansible.builtin.include_tasks: win_download.yml

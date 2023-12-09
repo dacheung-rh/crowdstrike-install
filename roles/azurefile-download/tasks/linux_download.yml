@@ -27,19 +27,32 @@
 - name: Create credential password
   ansible.builtin.shell: bash -c 'echo "password={{ smb_password }}" >> /etc/smbcredentials/{{ smb_username }}.cred'
   become: true
+  no_log: true
 
 - name: Mount ephemeral SMB volume
   ansible.posix.mount:
     src: "{{ smb_sourcepath }}"
     path: "{{ smb_targetpath }}"
-    opts: "rw,serverino,nosharesock,actimeo=30,file_mode=0777,dir_mode=0777,credentials=/etc/smbcredentials/{{ smb_username }}.cred,context=system_u:object_r:container_file_t:s0"
+    opts: "rw,serverino,nosharesock,vers=3.0,file_mode=0777,dir_mode=0777,credentials=/etc/smbcredentials/{{ smb_username }}.cred"
     fstype: cifs
     state: ephemeral
   become: true
 
-# - name: Unmount a mounted volume
-#   ansible.posix.mount:
-#     path: "{{ smb_targetpath }}"
-#     state: unmounted
+# - name: Mount ephemeral SMB volume
+#   ansible.builtin.shell: "mount -t cifs {{ smb_sourcepath }} {{ smb_targetpath }} -o credentials=/etc/smbcredentials/{{ smb_username }}.cred,dir_mode=0777,file_mode=0777,serverino,nosharesock,actimeo=30"
 #   become: true
-#   ignore_errors: true
+
+- name: Copy falcon agent install file to target host
+  ansible.builtin.copy:
+    src: "{{ smb_targetpath }}/{{ smb_filename }}"
+    dest: "/tmp"
+    remote_src: yes
+    owner: root
+    group: root
+    mode: u+rw,g-wx,o-rwx
+  ignore_errors: true
+
+- name: Unmount a mounted volume
+  mount:
+    path: "{{ smb_targetpath }}"
+    state: unmounted

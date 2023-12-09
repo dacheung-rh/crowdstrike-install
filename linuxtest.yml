@@ -1,6 +1,4 @@
 - hosts: RHEL
   roles:
-    - smb-mount
+    - azurefile-download
   
-  tasks:
-  - ansible.builtin.shell: "ls {{ smb_targetpath }}"

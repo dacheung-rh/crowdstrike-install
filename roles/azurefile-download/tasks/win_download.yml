@@ -1,0 +1,13 @@
+---
+- name: Add a PowerShell module
+  community.windows.win_psmodule:
+    name: az.storage
+    state: present
+
+- name: Copy downlaod powershell script
+  ansible.windows.win_copy:
+    src: "{{ playbook_dir }}/files/blobfiledownload.ps1"
+    dest: C:\Temp\blobfiledownload.ps1
+
+- name: Run powershell script
+  win_shell: "C:\\Temp\\blobfiledownload.ps1 {{ storageAccountName }} {{ storageAccountKey }} {{ containerName }} {{ blobName }} {{ destinationPath }}"
