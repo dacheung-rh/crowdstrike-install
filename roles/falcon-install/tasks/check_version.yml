@@ -22,7 +22,6 @@
     - name: Print CSSensor version
       ansible.builtin.debug:
         var: cssensor_version
-      
 
     - name: Check CSSensor version
       assert:
