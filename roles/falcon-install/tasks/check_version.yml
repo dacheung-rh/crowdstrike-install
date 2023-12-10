@@ -1,26 +1,58 @@
 ---
-# Windows block
+## Windows block
 - name: "Check available storage space (Windows)"
   when:
     - ansible_facts['os_family'] == "Windows"
   block:
     - name: Check sensor version
-      win_shell: "C:\Program Files\CrowdStrike\CSSensorSettings.exe" --version
-      register: cssensor_version
+      ansible.windows.win_command:
+        argv:
+        - C:\Program Files\CrowdStrike\CSSensorSettings.exe
+        - --version
+      register: result
 
-    # - name: Check storage size 1GB or above available space
-    #   assert:
-    #     that: disk_available_gb|int  > 1
+    - name: Print CSSensor information
+      ansible.builtin.debug:
+        var: result.stdout_lines[0]
 
-# Linux Block
+    - name: extract CSSensor version
+      set_fact:
+        cssensor_version: "{{ result.stdout_lines[0]|replace('CsSensorSettings Version:', '')|trim }}"
+
+    - name: Print CSSensor version
+      ansible.builtin.debug:
+        var: cssensor_version
+      
+
+    - name: Check CSSensor version
+      assert:
+        that: cssensor_version  > "{{ falcon_sensor_version }}"
+
+## Linux Block
 # - name: "Check available storage space (RHEL)"
 #   when:
 #     - ansible_facts['os_family'] == "RedHat"
 #   block:
-#     - set_fact:
-#         mount: "{{ ansible_mounts | first }}"
-                                                        
+#     - name: Check sensor version
+#       ansible.windows.win_command:
+#         argv:
+#         - C:\Program Files\CrowdStrike\CSSensorSettings.exe
+#         - --version
+#       register: result
 
-# - name: show sql server version
-#   debug:
-#     msg: "SQL server: {{ sql_server_edition }} - {{ sql_server_version }} - {{ sql_server_patchlevel }}"
+#     - name: Print CSSensor information
+#       ansible.builtin.debug:
+#         var: result.stdout_lines[0]
+
+#     - name: extract CSSensor version
+#       set_fact:
+#         cssensor_version: "{{ result.stdout_lines[0]|replace('CsSensorSettings Version:', '')|trim }}"
+
+#     - name: Print CSSensor version
+#       ansible.builtin.debug:
+#         var: cssensor_version
+      
+
+#     - name: Check CSSensor version
+#       assert:
+#         that: cssensor_version  > "{{ falcon_sensor_version }}"

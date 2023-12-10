@@ -1,21 +1,25 @@
 - hosts: Windows
-  roles:
-    - { role: falcon-install }
 
-  # tasks:
-  # - name: "Check available storage space (Windows)"
-  #   when:
-  #     - ansible_facts['os_family'] == "Windows"
-  #   block:
-  #     - name: Get windows disk facts
-  #       community.windows.win_disk_facts:
+  tasks:
+  - name: Check sensor version
+    ansible.windows.win_command:
+      argv:
+      - C:\Program Files\CrowdStrike\CSSensorSettings.exe
+      - --version
+    register: result
 
-  #     - set_fact:
-  #         disk: '{{ ansible_facts.disks|selectattr("system_disk")|first }}'
-                                                                                                                              
-  #     - set_fact: 
-  #         disk_available_gb: '{{ (disk.size/1024|pow(3))|round|int }}'
+  - name: Print CSSensor information
+    ansible.builtin.debug:
+      var: result.stdout_lines[0]
 
-  #     - name: Check if there is enough space
-  #       assert:
-  #         that: disk_available_gb|int  > 1
+  - name: extract CSSensor version
+    set_fact:
+      cssensor_version: "{{ result.stdout_lines[0]|replace('CsSensorSettings Version:', '')|trim }}"
+
+  - name: Print CSSensor version
+    ansible.builtin.debug:
+      var: cssensor_version
+
+  - name: Check CSSensor version
+    assert:
+      that: cssensor_version  > '7.04.17604.0'
