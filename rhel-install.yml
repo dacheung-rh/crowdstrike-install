@@ -1,0 +1,5 @@
+- hosts: RHEL
+  gather_facts: true
+
+  roles:
+    - { role: falcon-install }

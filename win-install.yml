@@ -1,9 +1,5 @@
 - hosts: Windows
   gather_facts: true
 
-  pre_tasks:
-    - import_role:
-      name: azurefile-download
-
   roles:
     - { role: falcon-install }
