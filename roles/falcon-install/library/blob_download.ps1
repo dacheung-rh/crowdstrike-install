@@ -12,7 +12,6 @@ $spec = @{
         blobName = @{ type = "str" }
         destinationPath = @{ type = "str" }
     }
-    # required_if = @(@("actiontype", "get", @("identity", "storageAccountName", "storageAccountKey", "containerName", "blobName", "destinationPath")))
     supports_check_mode = $true
 }
 
