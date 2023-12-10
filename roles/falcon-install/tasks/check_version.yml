@@ -29,30 +29,30 @@
         that: cssensor_version  > "{{ falcon_sensor_version }}"
 
 ## Linux Block
-# - name: "Check available storage space (RHEL)"
-#   when:
-#     - ansible_facts['os_family'] == "RedHat"
-#   block:
-#     - name: Check sensor version
-#       ansible.windows.win_command:
-#         argv:
-#         - C:\Program Files\CrowdStrike\CSSensorSettings.exe
-#         - --version
-#       register: result
+- name: "Check available storage space (RHEL)"
+  when:
+    - ansible_facts['os_family'] == "RedHat"
+  block:
+    - name: Check sensor version
+      ansible.builtin.command:
+        argv:
+          - /opt/CrowdStrike/falconctl
+          - -g
+          - --version
+      register: result
 
-#     - name: Print CSSensor information
-#       ansible.builtin.debug:
-#         var: result.stdout_lines[0]
+    - name: Print CSSensor information
+      ansible.builtin.debug:
+        var: result.stdout_lines[0]
 
-#     - name: extract CSSensor version
-#       set_fact:
-#         cssensor_version: "{{ result.stdout_lines[0]|replace('CsSensorSettings Version:', '')|trim }}"
+    - name: extract CSSensor version
+      set_fact:
+        cssensor_version: "{{ result.stdout_lines[0]|replace('version =', '')|trim }}"
 
-#     - name: Print CSSensor version
-#       ansible.builtin.debug:
-#         var: cssensor_version
-      
+    - name: Print CSSensor version
+      ansible.builtin.debug:
+        var: cssensor_version
 
-#     - name: Check CSSensor version
-#       assert:
-#         that: cssensor_version  > "{{ falcon_sensor_version }}"
+    - name: Check CSSensor version
+      assert:
+        that: cssensor_version  > "{{ falcon_sensor_version }}"
