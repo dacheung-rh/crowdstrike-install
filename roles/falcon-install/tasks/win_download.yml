@@ -1,4 +1,9 @@
 ---
+- name: Create directory structure
+  ansible.windows.win_file:
+    path: "{{ destinationPath }}"
+    state: directory
+
 - name: Dowload file from blob container
   blob_download:
     storageAccountName: "{{ storageAccountName }}"
