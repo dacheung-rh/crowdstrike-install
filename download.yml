@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: RHEL
   gather_facts: false
   tasks:
     # - name: Utility present
