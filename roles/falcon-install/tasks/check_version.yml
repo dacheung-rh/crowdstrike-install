@@ -8,6 +8,8 @@
       ansible.windows.win_stat:
         path: C:\Program Files\CrowdStrike\CSSensorSettings.exe
       become: true
+      become_method: "{{ falcon_windows_become_method }}"
+      become_user: "{{ falcon_windows_become_user }}"
       register: p_info
 
     - debug:
@@ -24,6 +26,8 @@
         - C:\Program Files\CrowdStrike\CSSensorSettings.exe
         - --version
       become: true
+      become_method: "{{ falcon_windows_become_method }}"
+      become_user: "{{ falcon_windows_become_user }}"
       register: result
       when: p_info.stat.exists is defined and p_info.stat.exists
 
