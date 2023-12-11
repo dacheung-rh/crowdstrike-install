@@ -2,19 +2,6 @@
 #
 falcon_localfile_path:
 
-# If the installation method is 'file', specify whether to remove the local file after installation.
-# By default, this is disabled in the event the falcon_localfile_path is set to a shared file
-# system location.
-#
-falcon_localfile_cleanup: no
-
-# Specify whether or not to verify the Falcon sensor Linux based packages.
-# By default, this is enabled - which will handle the installation and importing
-# of the CrowdStrike Falcon sensor GPG Key.
-#
-falcon_gpg_key_check: yes
-
-
 # The Falcon sensor version to install. This allows you to pin a specific sensor
 # version.
 #

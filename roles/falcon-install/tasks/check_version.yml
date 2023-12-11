@@ -4,20 +4,33 @@
   when:
     - ansible_facts['os_family'] == "Windows"
   block:
+    - name: Get stats of the FS object
+      ansible.windows.win_stat:
+        path: C:\Program Files\CrowdStrike\CSSensorSettings.exe
+      become: true
+      register: p_info
+
+    - debug:
+        msg: p_info
+
+    - name: Set current version default
+      set_fact:
+        cssensor_version: "0"
+      when: p_info.stat.exists is defined and not p_info.stat.exists
+
     - name: Check sensor version
       ansible.windows.win_command:
         argv:
         - C:\Program Files\CrowdStrike\CSSensorSettings.exe
         - --version
+      become: true
       register: result
-
-    - name: Print CSSensor information
-      ansible.builtin.debug:
-        var: result.stdout_lines[0]
+      when: p_info.stat.exists is defined and p_info.stat.exists
 
     - name: extract CSSensor version
       set_fact:
         cssensor_version: "{{ result.stdout_lines[0]|replace('CsSensorSettings Version:', '')|trim }}"
+      when: p_info.stat.exists is defined and p_info.stat.exists
 
     - name: Print CSSensor version
       ansible.builtin.debug:
@@ -26,32 +39,38 @@
     - name: Check CSSensor version
       assert:
         that: cssensor_version  > "{{ falcon_sensor_version }}"
-
-  rescue:
-    - name: Falcon agent not found
-      ansible.builtin.debug:
-        msg: "Falcon agent not found"
+      when: p_info.stat.exists is defined and p_info.stat.exists
 
 ## Linux Block
 - name: "Check available storage space (RHEL)"
   when:
     - ansible_facts['os_family'] == "RedHat"
   block:
+    - name: Get stats of the FS object
+      ansible.builtin.stat:
+        path: /opt/CrowdStrike/falconctl
+      become: true
+      register: p_info
+
+    - name: Set current version default
+      set_fact:
+        cssensor_version: "0"
+      when: p_info.stat.exists is defined and not p_info.stat.exists
+
     - name: Check sensor version
       ansible.builtin.command:
         argv:
           - /opt/CrowdStrike/falconctl
           - -g
           - --version
+      become: true
       register: result
-
-    - name: Print CSSensor information
-      ansible.builtin.debug:
-        var: result.stdout_lines[0]
+      when: p_info.stat.exists is defined and p_info.stat.exists
 
     - name: extract CSSensor version
       set_fact:
         cssensor_version: "{{ result.stdout_lines[0]|replace('version =', '')|trim }}"
+      when: p_info.stat.exists is defined and p_info.stat.exists
 
     - name: Print CSSensor version
       ansible.builtin.debug:
@@ -60,8 +79,4 @@
     - name: Check CSSensor version
       assert:
         that: cssensor_version  > "{{ falcon_sensor_version }}"
-
-  rescue:
-    - name: Falcon agent not found
-      ansible.builtin.debug:
-        msg: "Falcon agent not found"
+      when: p_info.stat.exists is defined and p_info.stat.exists
