@@ -48,4 +48,4 @@
   mount:
     path: "{{ smb_targetpath }}"
     state: unmounted
-      become: true
+  become: true
