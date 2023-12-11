@@ -27,6 +27,11 @@
       assert:
         that: cssensor_version  > "{{ falcon_sensor_version }}"
 
+  rescue:
+    - name: Falcon agent not found
+      ansible.builtin.debug:
+        msg: "Falcon agent not found"
+
 ## Linux Block
 - name: "Check available storage space (RHEL)"
   when:
@@ -55,3 +60,8 @@
     - name: Check CSSensor version
       assert:
         that: cssensor_version  > "{{ falcon_sensor_version }}"
+
+  rescue:
+    - name: Falcon agent not found
+      ansible.builtin.debug:
+        msg: "Falcon agent not found"
