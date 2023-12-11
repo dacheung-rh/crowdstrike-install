@@ -1,6 +1,6 @@
 ---
 - name: CrowdStrike Falcon | Install Falcon Sensor Package (Linux)
-  ansible.builtin.dnf:
+  ansible.builtin.yum:
     name: "{{ falcon_sensor_pkg }}"
     disable_gpg_check: true
     state: present
