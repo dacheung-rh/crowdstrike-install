@@ -1,17 +1,62 @@
 ---
-- hosts: Windows
+- hosts: localhost
   gather_facts: false
   tasks:
-  - ansible.windows.win_ping:
+    # - name: Utility present
+    #   ansible.builtin.package:
+    #     name: cifs-utils
+    #     state: present
+    #   become: true
+    #   become_user: root
 
-  - ansible.windows.win_shell: whoami
+    - name: Create mount point directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ smb_targetpath }}"
+        state: directory
+        mode: '0755'
+      become: true
 
-  - name: download update file
-    win_get_url:
-      dest: "{{ update_file_path }}"
-      url: "{{ update_file_url }}"
-    register: download_update
-    until: download_update is success
-    delay: 3
-    retries: 5
-    when: (":" in update_file_path) and (not update_file.stat.exists)
+    - name: Create credential directory if it does not exist
+      ansible.builtin.file:
+        path: /etc/smbcredentials
+        state: directory
+        mode: '0755'
+      become: true
+
+    - name: Create credential username
+      ansible.builtin.shell: bash -c 'echo "username={{ smb_username }}" > /etc/smbcredentials/{{ smb_username }}.cred'
+      become: true
+
+    - name: Create credential password
+      ansible.builtin.shell: bash -c 'echo "password={{ smb_password }}" >> /etc/smbcredentials/{{ smb_username }}.cred'
+      become: true
+      # no_log: true
+
+    - name: debug 
+      ansible.builtin.shell: 'cat /etc/smbcredentials/{{ smb_username }}.cred'
+      become: true
+      # no_log: true
+
+    - name: Mount ephemeral SMB volume
+      ansible.posix.mount:
+        src: "{{ smb_sourcepath }}"
+        path: "{{ smb_targetpath }}"
+        opts: "rw,serverino,nosharesock,vers=3.0,file_mode=0777,dir_mode=0777,credentials=/etc/smbcredentials/{{ smb_username }}.cred"
+        fstype: cifs
+        state: ephemeral
+      become: true
+
+    # - name: Copy falcon agent install file to target host
+    #   ansible.builtin.copy:
+    #     src: "{{ smb_targetpath }}/{{ smb_filename }}"
+    #     dest: "/tmp"
+    #     remote_src: yes
+    #     owner: root
+    #     group: root
+    #     mode: u+rw,g-wx,o-rwx
+    #   ignore_errors: true
+
+    # - name: Unmount a mounted volume
+    #   mount:
+    #     path: "{{ smb_targetpath }}"
+    #     state: unmounted
